@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from sqlalchemy import ForeignKey, Index, DECIMAL
+from sqlalchemy import ForeignKey, Index, DECIMAL, String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -11,13 +11,13 @@ class ParcelType(Base):
     __tablename__ = "parcel_types"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(unique=True)
+    name: Mapped[str] = mapped_column(String(64), unique=True)
 
 class Parcel(Base):
     __tablename__ = "parcels"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str]
+    name: Mapped[str] = mapped_column(String(64))
     weight: Mapped[Decimal] = mapped_column(DECIMAL(6, 2))
     type_id: Mapped[int] = mapped_column(ForeignKey(ParcelType.id))
     parcel_type: Mapped["ParcelType"] = relationship()
