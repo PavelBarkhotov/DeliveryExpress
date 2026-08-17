@@ -4,10 +4,15 @@ version = "0.1.0"
 requires-python = ">=3.13"
 dependencies = [
     "asyncpg>=0.31.0",
+    "bandit>=1.9.4",
     "fastapi>=0.141.1",
+    "mypy>=2.3.1",
+    "pre-commit>=4.6.2",
     "pydantic-settings>=2.15.0",
+    "pytest>=9.1.1",
     "python-dotenv>=1.2.2",
     "sqlalchemy[asyncio]>=2.0.52",
+    "starlette>=1.6.0",
     "uvicorn>=0.52.2",
 ]
 
@@ -15,3 +20,6 @@ dependencies = [
 dev = [
     "alembic>=1.19.1",
 ]
+
+[tool.mypy]
+plugins = ["pydantic.mypy"]
