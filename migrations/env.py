@@ -1,6 +1,7 @@
 import asyncio
 from logging.config import fileConfig
 
+from sqlalchemy import URL
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import create_async_engine
 
@@ -24,6 +25,14 @@ if config.config_file_name is not None:
 # target_metadata = mymodel.Base.metadata
 target_metadata = Base.metadata
 
+def get_database_url() -> URL:
+    database_url = config.attributes.get("database_url")
+
+    if database_url is not None:
+        return database_url
+
+    return settings.database_url
+
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
@@ -42,7 +51,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = settings.database_url.render_as_string(hide_password=False)
+    url = get_database_url().render_as_string(hide_password=False)
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -68,7 +77,7 @@ async def run_async_migrations() -> None:
     """
 
     connectable = create_async_engine(
-        settings.database_url,
+        get_database_url(),
     )
 
     async with connectable.connect() as connection:

@@ -99,7 +99,7 @@ security:
 # ===============================
 
 test:
-	uv run pytest
+	uv run python -m pytest
 
 
 # ===============================
