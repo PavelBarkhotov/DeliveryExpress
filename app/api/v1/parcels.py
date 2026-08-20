@@ -1,4 +1,6 @@
-from fastapi import APIRouter, Depends, status
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.service import parcels as parcels_service
@@ -11,10 +13,16 @@ router = APIRouter()
 
 @router.get("/parcels", response_model=list[ParcelResponse])
 async def get_user_parcels(
+    limit: Annotated[int, Query(gt=0, le=100)] = 20,
+    offset: Annotated[int, Query(ge=0)] = 0,
+    type_id: Annotated[int | None, Query(gt=0)] = None,
+    calculated: bool | None = None,
     db: AsyncSession = Depends(get_session),
     user_session: str = Depends(get_user_session),
 ):
-    return await parcels_service.get_user_parcels(db, user_session)
+    return await parcels_service.get_user_parcels(
+        limit, offset, type_id, calculated, db, user_session
+    )
 
 
 @router.get("/parcels/{parcel_id}", response_model=ParcelResponse)

@@ -6,10 +6,17 @@ from app.service import parcel_type as parcel_type_service
 from app.schemas import ParcelRequest
 
 
-async def get_user_parcels(db: AsyncSession, user_session: str):
-    result = await parcels_repository.get_all_parcels(db, user_session)
-    if not result:
-        raise HTTPException(status_code=404, detail="Посылки не были найдены")
+async def get_user_parcels(
+    limit: int,
+    offset: int,
+    type_id: int | None,
+    calculated: bool | None,
+    db: AsyncSession,
+    user_session: str,
+):
+    result = await parcels_repository.get_all_parcels(
+        limit, offset, type_id, calculated, db, user_session
+    )
     return result
 
 

@@ -8,11 +8,33 @@ from app.schemas import ParcelRequest
 from app.models import ParcelType
 
 
-async def get_all_parcels(db: AsyncSession, user_session: str) -> Sequence[Parcel]:
+async def get_all_parcels(
+    limit: int,
+    offset: int,
+    type_id: int | None,
+    calculated: bool | None,
+    db: AsyncSession,
+    user_session: str,
+) -> Sequence[Parcel]:
+    conditions = [Parcel.user_session == user_session]
+
+    if type_id is not None:
+        conditions.append(Parcel.type_id == type_id)
+
+    if calculated is not None:
+        conditions.append(
+            Parcel.delivery_price.is_not(None)
+            if calculated
+            else Parcel.delivery_price.is_(None)
+        )
+
     query = (
         select(Parcel)
-        .where(Parcel.user_session == user_session)
+        .where(*conditions)
         .options(selectinload(Parcel.parcel_type))
+        .order_by(Parcel.id)
+        .limit(limit)
+        .offset(offset)
     )
     result = await db.execute(query)
     return result.scalars().all()
