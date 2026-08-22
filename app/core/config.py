@@ -19,6 +19,8 @@ class Settings(BaseSettings):
 
     CBR_URL: str
 
+    DEBUG: bool
+
     @property
     def database_url(self):
         return URL.create(

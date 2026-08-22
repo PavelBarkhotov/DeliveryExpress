@@ -1,6 +1,9 @@
 from celery import Celery
-
+from app.core.logging import configure_logging
 from app.core.config import settings
+
+
+configure_logging()
 
 celery_app = Celery(
     "delivery_pricer",

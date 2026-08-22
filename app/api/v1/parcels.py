@@ -1,4 +1,5 @@
 from typing import Annotated
+import logging
 
 from fastapi import APIRouter, Depends, status, Query
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -8,6 +9,8 @@ from app.dependency import get_session, get_user_session
 from app.schemas import ParcelRequest, ParcelResponse, ParcelTypeResponse
 from app.service import parcel_type as parcel_type_service
 from app.tasks.parcels import calculate_delivery_price_task
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -54,4 +57,7 @@ async def get_all_parcel_types(db: AsyncSession = Depends(get_session)):
 @router.post("/calculate_delivery_prices", status_code=status.HTTP_202_ACCEPTED)
 def calculate_delivery_prices():
     task = calculate_delivery_price_task.delay()
+    logger.info(
+        "Создана задача на расчет стоимости посылок", extra={"task_id": task.id}
+    )
     return {"task_id": task.id, "status": "Added to queue"}

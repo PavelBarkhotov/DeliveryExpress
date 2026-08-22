@@ -71,16 +71,15 @@ async def create_parcel(
 # Запрос для задачи Celery
 async def get_all_parcels_for_task(
     limit: int,
-    offset: int,
     db: AsyncSession,
 ) -> Sequence[Parcel]:
 
     query = (
         select(Parcel)
         .where(Parcel.delivery_price.is_(None))
+        .with_for_update(skip_locked=True)
         .order_by(Parcel.id)
         .limit(limit)
-        .offset(offset)
     )
     result = await db.execute(query)
     return result.scalars().all()
