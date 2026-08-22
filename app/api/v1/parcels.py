@@ -7,6 +7,7 @@ from app.service import parcels as parcels_service
 from app.dependency import get_session, get_user_session
 from app.schemas import ParcelRequest, ParcelResponse, ParcelTypeResponse
 from app.service import parcel_type as parcel_type_service
+from app.tasks.parcels import calculate_delivery_price_task
 
 router = APIRouter()
 
@@ -48,3 +49,9 @@ async def create_parcel(
 @router.get("/parcel-types", response_model=list[ParcelTypeResponse])
 async def get_all_parcel_types(db: AsyncSession = Depends(get_session)):
     return await parcel_type_service.get_all_parcel_types(db)
+
+
+@router.post("/calculate_delivery_prices", status_code=status.HTTP_202_ACCEPTED)
+def calculate_delivery_prices():
+    task = calculate_delivery_price_task.delay()
+    return {"task_id": task.id, "status": "Added to queue"}

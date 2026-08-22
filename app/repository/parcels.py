@@ -66,3 +66,21 @@ async def create_parcel(
     db.add(item)
     await db.flush()
     return item
+
+
+# Запрос для задачи Celery
+async def get_all_parcels_for_task(
+    limit: int,
+    offset: int,
+    db: AsyncSession,
+) -> Sequence[Parcel]:
+
+    query = (
+        select(Parcel)
+        .where(Parcel.delivery_price.is_(None))
+        .order_by(Parcel.id)
+        .limit(limit)
+        .offset(offset)
+    )
+    result = await db.execute(query)
+    return result.scalars().all()
