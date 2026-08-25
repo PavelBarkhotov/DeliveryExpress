@@ -5,19 +5,16 @@ import pytest_asyncio
 from alembic.config import Config
 from alembic import command
 from httpx2 import AsyncClient, ASGITransport
-from sqlalchemy import text
+from sqlalchemy import text, NullPool
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 
-from app.core.config import settings
+from app.core.config import Settings
 from app.dependency import get_session
 from main import app
 
-test_settings = settings
-test_settings.DB_NAME = "test_delivery"
+test_settings = Settings(DB_NAME="test_delivery")
 
-test_engine = create_async_engine(
-    test_settings.database_url,
-)
+test_engine = create_async_engine(test_settings.database_url, poolclass=NullPool)
 
 test_session_factory = async_sessionmaker(test_engine, expire_on_commit=False)
 
