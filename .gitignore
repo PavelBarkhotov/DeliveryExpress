@@ -1,10 +1,12 @@
 # Python-generated files
 __pycache__/
 *.py[oc]
+*.py[cod]
 build/
 dist/
 wheels/
 *.egg-info
+.DS_Store
 
 # Virtual environments
 .venv
@@ -14,3 +16,5 @@ wheels/
 #db
 *.sqlite3
 celerybeat-schedule
+celerybeat-schedule-shm
+celerybeat-schedule-wal
