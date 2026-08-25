@@ -3,7 +3,7 @@
 # ===============================
 
 PY_SRCS = app tests
-APP = app.main:app
+APP = main:app
 
 
 # ===============================
