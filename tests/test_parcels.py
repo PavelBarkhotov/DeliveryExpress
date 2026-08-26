@@ -1,7 +1,7 @@
 from decimal import Decimal
 from unittest.mock import patch
 
-from httpx2 import AsyncClient, ASGITransport
+from httpx import AsyncClient, ASGITransport
 
 from main import app
 

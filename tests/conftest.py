@@ -4,7 +4,7 @@ import pytest
 import pytest_asyncio
 from alembic.config import Config
 from alembic import command
-from httpx2 import AsyncClient, ASGITransport
+from httpx import AsyncClient, ASGITransport
 from sqlalchemy import text, NullPool
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 

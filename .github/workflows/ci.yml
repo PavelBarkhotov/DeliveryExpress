@@ -1,0 +1,52 @@
+name: CI
+on:
+  push:
+    branches:
+      - dev
+jobs:
+  quality-gate:
+    env:
+      DB_USER: test_postgres
+      DB_PASSWORD: "123456"
+      DB_HOST: localhost
+      DB_PORT: "5432"
+      DB_NAME: test_delivery
+    runs-on: ubuntu-22.04
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_USER: ${{env.DB_USER}}
+          POSTGRES_PASSWORD: ${{env.DB_PASSWORD}}
+          POSTGRES_DB: ${{env.DB_NAME}}
+        ports:
+          - "5432:5432"
+        options: >-
+          --health-cmd "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: '0.11.14'
+
+      - name: Install dependencies
+        run: uv sync --frozen
+
+      - name: Run make check
+        run: make check
+
+
+
+
+
