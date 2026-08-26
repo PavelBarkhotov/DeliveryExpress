@@ -1,12 +1,13 @@
 import json
+import logging
 from decimal import Decimal
 from typing import Any
-import logging
 
 import httpx
 import redis
 from httpx import HTTPStatusError, RequestError
 from redis import Redis
+
 from app.core.config import settings
 
 logger = logging.getLogger(__name__)
@@ -53,6 +54,5 @@ def get_usd_rate(redis_client: Redis) -> Decimal:
         redis_client.set("usd", str(usd_rate), ex=settings.USD_RATE_TTL)
     except redis.exceptions.ConnectionError:
         logger.warning("Редис не доступен")
-        pass
 
     return usd_rate

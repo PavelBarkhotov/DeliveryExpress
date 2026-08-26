@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from pydantic import BaseModel, field_validator, Field, ConfigDict, field_serializer
+from pydantic import BaseModel, ConfigDict, Field, field_serializer, field_validator
 
 
 class ParcelTypeResponse(BaseModel):

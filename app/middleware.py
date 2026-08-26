@@ -1,9 +1,9 @@
+import logging
+import time
+
 from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoint
 from starlette.requests import Request
 from starlette.responses import Response
-
-import logging
-import time
 
 logger = logging.getLogger(__name__)
 

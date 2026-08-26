@@ -1,7 +1,7 @@
 from celery import Celery
-from app.core.logging import configure_logging
-from app.core.config import settings
 
+from app.core.config import settings
+from app.core.logging import configure_logging
 
 configure_logging()
 

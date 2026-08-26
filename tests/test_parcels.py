@@ -1,11 +1,10 @@
 from decimal import Decimal
 from unittest.mock import patch
 
-from httpx import AsyncClient, ASGITransport
+import pytest
+from httpx import ASGITransport, AsyncClient
 
 from main import app
-
-import pytest
 
 
 @pytest.mark.asyncio

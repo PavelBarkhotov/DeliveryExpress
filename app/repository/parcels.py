@@ -1,11 +1,11 @@
-from typing import Sequence
+from collections.abc import Sequence
+
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.models import Parcel
+from app.models import Parcel, ParcelType
 from app.schemas import ParcelRequest
-from app.models import ParcelType
 
 
 async def get_all_parcels(

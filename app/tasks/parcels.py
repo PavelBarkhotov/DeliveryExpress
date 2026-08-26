@@ -1,11 +1,11 @@
 import asyncio
-from decimal import Decimal
 import logging
+from decimal import Decimal
 
 from app.core.celery import celery_app
+from app.core.redis import get_redis
 from app.db.celery_session import celery_session_factory
 from app.repository.parcels import get_all_parcels_for_task
-from app.core.redis import get_redis
 from app.service.exchange_rate import get_usd_rate
 
 logger = logging.getLogger(__name__)

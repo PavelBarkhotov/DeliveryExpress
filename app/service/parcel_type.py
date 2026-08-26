@@ -1,10 +1,10 @@
-from typing import Sequence
+from collections.abc import Sequence
 
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.repository import parcel_type as parcel_type_repository
 from app.models import ParcelType
+from app.repository import parcel_type as parcel_type_repository
 
 
 async def get_parcel_type(parcel_type_id: int, db: AsyncSession) -> ParcelType:

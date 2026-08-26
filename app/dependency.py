@@ -1,14 +1,14 @@
 import secrets
+from collections.abc import AsyncGenerator
 
+from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.requests import Request
 from starlette.responses import Response
-from collections.abc import AsyncGenerator
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.session import session_factory
 
 
-async def get_session() -> AsyncGenerator[AsyncSession, None]:
+async def get_session() -> AsyncGenerator[AsyncSession]:
     async with session_factory() as session:
         yield session
 

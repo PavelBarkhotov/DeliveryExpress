@@ -2,8 +2,8 @@ from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.repository import parcels as parcels_repository
-from app.service import parcel_type as parcel_type_service
 from app.schemas import ParcelRequest
+from app.service import parcel_type as parcel_type_service
 
 
 async def get_user_parcels(

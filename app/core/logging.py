@@ -1,5 +1,6 @@
 import logging
 import sys
+
 from pythonjsonlogger.json import JsonFormatter
 
 from app.core.config import settings

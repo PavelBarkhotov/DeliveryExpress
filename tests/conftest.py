@@ -2,11 +2,11 @@ from collections.abc import AsyncGenerator
 
 import pytest
 import pytest_asyncio
-from alembic.config import Config
 from alembic import command
-from httpx import AsyncClient, ASGITransport
-from sqlalchemy import text, NullPool
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from alembic.config import Config
+from httpx import ASGITransport, AsyncClient
+from sqlalchemy import NullPool, text
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from app.core.config import Settings
 from app.dependency import get_session
@@ -19,7 +19,7 @@ test_engine = create_async_engine(test_settings.database_url, poolclass=NullPool
 test_session_factory = async_sessionmaker(test_engine, expire_on_commit=False)
 
 
-async def override_get_session() -> AsyncGenerator[AsyncSession, None]:
+async def override_get_session() -> AsyncGenerator[AsyncSession]:
     async with test_session_factory() as session:
         yield session
 
