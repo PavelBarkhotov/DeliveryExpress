@@ -43,6 +43,9 @@ jobs:
       - name: Install dependencies
         run: uv sync --frozen
 
+      - name: Add env
+        run: cp .env-example .env
+
       - name: Run make check
         run: make check
 
