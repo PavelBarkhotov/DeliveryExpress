@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from pydantic import BaseModel, field_validator, Field, ConfigDict
+from pydantic import BaseModel, field_validator, Field, ConfigDict, field_serializer
 
 
 class ParcelTypeResponse(BaseModel):
@@ -36,3 +36,9 @@ class ParcelResponse(BaseModel):
     delivery_price: Decimal | None = Field(
         default=None, gt=0, max_digits=10, decimal_places=2
     )
+
+    @field_serializer("delivery_price")
+    def return_str_if_none(self, v: None | Decimal) -> str | Decimal:
+        if v is None:
+            return "Не рассчитано"
+        return v

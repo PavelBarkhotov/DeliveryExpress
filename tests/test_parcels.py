@@ -19,6 +19,7 @@ async def test_parcel_create_happy_path(client):
     assert response.json()["name"] == "string"
     assert Decimal(response.json()["weight"]) == 1
     assert Decimal(response.json()["dollar_price"]) == 1
+    assert response.json()["delivery_price"] == "Не рассчитано"
 
 
 @pytest.mark.asyncio
