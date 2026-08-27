@@ -1,3 +1,9 @@
+x-app: &app_image
+  build:
+    context: .
+    dockerfile: Dockerfile
+  image: parcels-backend:1
+
 services:
   db:
     image: postgres:18-alpine
@@ -21,32 +27,14 @@ services:
   redis:
     image: redis:8.8.2-alpine
     restart: always
-    ports:
-      - "6379"
     healthcheck:
       test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
       interval: 1s
       timeout: 3s
       retries: 5
 
-  migrate:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: ["alembic", "upgrade", "head"]
-    env_file:
-      - .env
-    environment:
-      - DB_HOST=db
-    depends_on:
-      db:
-        condition: service_healthy
-
-
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    <<: *app_image
     restart: always
     env_file:
       - .env
@@ -61,10 +49,19 @@ services:
       migrate:
         condition: service_completed_successfully
 
+  migrate:
+    <<: *app_image
+    command: [ "alembic", "upgrade", "head" ]
+    env_file:
+      - .env
+    environment:
+      - DB_HOST=db
+    depends_on:
+      db:
+        condition: service_healthy
+
   worker:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    <<: *app_image
     restart: always
     env_file:
       - .env
@@ -79,9 +76,7 @@ services:
         condition: service_completed_successfully
 
   beat:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    <<: *app_image
     restart: always
     env_file:
       - .env
